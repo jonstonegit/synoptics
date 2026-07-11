@@ -14,6 +14,40 @@ from helpers import (
 
 DISPLAY_NAME = "Prostate, Resection"
 
+epe_location_field = checkbox_group(
+        label="Location of Extraprostatic Extension (select all that apply)",
+        options=[
+            "Right apical",
+            "Right bladder neck",
+            "Right anterior",
+            "Right lateral",
+            "Right posterolateral (neurovascular bundle)",
+            "Right posterior",
+            "Left apical",
+            "Left bladder neck",
+            "Left anterior",
+            "Left lateral",
+            "Left posterolateral (neurovascular bundle)",
+            "Left posterior",
+            "Other",
+            "Cannot be determined",
+        ],
+        conditional_fields={
+            "Other": text(
+                "Other location(s)",
+                key="epe_location_other",
+            ),
+            "Cannot be determined": text(
+                "Comment",
+                key="epe_location_cannot_be_determined_explanation",
+            ),
+        },
+        exclusive_options=[
+            "Cannot be determined",
+        ],
+        key="epe_location",
+    ),
+
 SYNOPTIC = [
     ("title", "CASE SUMMARY", "(PROSTATE GLAND: Radical Prostatectomy) Standard(s): AJCC-UICC 8"),
 
@@ -29,7 +63,7 @@ SYNOPTIC = [
 
     ("section", "TUMOR"),
 
-    conditional_radio_other(
+    radio_other(
         "Histologic Type",
         [
             "Acinar adenocarcinoma, conventional (usual)",
@@ -48,9 +82,6 @@ SYNOPTIC = [
             "Large cell neuroendocrine carcinoma",
             "Carcinoma, type cannot be determined",
         ],
-        trigger="",
-        sublabel="",
-        suboptions=[],
     ),
 
     ("section", "HISTOLOGIC GRADE"),
@@ -207,24 +238,29 @@ SYNOPTIC = [
     ),
 
     conditional_radio_multiple(
-        "Intraductal Carcinoma (IDC)",
+        "Intraductal Carcinoma (IDC) (Note D)",
         [
             "Not identified",
             "Present",
+            "Cannot be determined",
         ],
         conditional_fields={
-            "Present": [
-                conditional_radio_multiple(
-                    "IDC Incorporated into Grade",
-                    [
-                        "Yes",
-                        "No",
-                        "Cannot be determined",
-                    ],
-                    key="idc_incorporated_into_grade",
+            "Present": radio(
+                "IDC Incorporated into Grade",
+                [
+                    "Yes",
+                    "No",
+                ],
+                key="idc_incorporated_into_grade",
+            ),
+            "Cannot be determined": [
+                text(
+                    "Comment",
+                    key="IDC_cannot_be_determined",
                 ),
             ],
         },
+        key="intraductal_carcinoma",
     ),
 
     conditional_radio_multiple(
@@ -238,12 +274,127 @@ SYNOPTIC = [
         conditional_fields={
             "Cannot be determined": [
                 text(
-                    "Explain",
+                    "Comment",
                     key="cribriform_glands_cannot_be_determined",
                 ),
             ],
         },
     ),
+
+    checkbox_group(
+        label="Treatment Effect",
+        options=[
+            "No known presurgical therapy",
+            "Not identified",
+            "Radiation therapy effect present",
+            "Hormonal therapy effect present",
+            "Other therapy effect(s) present",
+            "Cannot be determined",
+        ],
+        conditional_fields={
+            "Radiation therapy effect present": text(
+                "Radiation therapy effect",
+                key="radiation_therapy_effect_detail",
+            ),
+            "Hormonal therapy effect present": text(
+                "Hormonal therapy effect",
+                key="hormonal_therapy_effect_detail",
+            ),
+            "Other therapy effect(s) present": text(
+                "Other therapy effect(s)",
+                key="other_therapy_effect_detail",
+            ),
+            "Cannot be determined": text(
+                "Comment",
+                key="treatment_effect_cannot_be_determined_reason",
+            ),
+        },
+        default="No known presurgical therapy",
+        exclusive_options=[
+            "No known presurgical therapy",
+            "Not identified",
+        ],
+        key="treatment_effect",
+    ),
+
+    (
+    "section",
+    "TUMOR QUANTITATION (Note E)",
+    ),
+
+    checkbox_group(
+        label="Tumor Quantitation (select all that apply)",
+        options=[
+            "Via percentage",
+            "Via dimension",
+        ],
+        conditional_fields={
+            "Via percentage": conditional_radio_multiple(
+                label="Estimated Percentage of Prostate Involved by Tumor",
+                options=[
+                    "Less than 1%",
+                    "1 - 5%",
+                    "6 - 10%",
+                    "11 - 20%",
+                    "21 - 30%",
+                    "31 - 40%",
+                    "41 - 50%",
+                    "51 - 60%",
+                    "61 - 70%",
+                    "71 - 80%",
+                    "81 - 90%",
+                    "Greater than 90%",
+                    "Cannot be determined",
+                ],
+                conditional_fields={
+                    "Cannot be determined": text(
+                        "Comment",
+                        key="tumor_percentage_cannot_be_determined_explanation",
+                    ),
+                },
+                key="estimated_percentage_prostate_involved",
+            ),
+
+            "Via dimension": [
+                text(
+                    "Greatest Dimension of Dominant Nodule in mm",
+                    suffix=" mm",
+                    key="dominant_nodule_greatest_dimension",
+                ),
+                text(
+                    "Additional Dimensions of Dominant Nodule in mm",
+                    suffix=" mm",
+                    key="dominant_nodule_additional_dimensions",
+                ),
+                text(
+                    "Location of Dominant Nodule",
+                    key="dominant_nodule_location",
+                ),
+            ],
+        },
+        key="tumor_quantitation_method",
+    ),
+
+    conditional_radio_multiple(
+        label="Extraprostatic Extension (EPE) (Note F)",
+        options=[
+            "Not identified",
+            "Present, focal",
+            "Present, nonfocal",
+            "Cannot be determined",
+        ],
+        conditional_fields={
+            "Present, focal": epe_location_field,
+            "Present, nonfocal": epe_location_field,
+            "Cannot be determined": text(
+                "Comment",
+                key="epe_cannot_be_determined_explanation",
+            ),
+        },
+        key="extraprostatic_extension",
+    ),
+
+    
 
 
 ]

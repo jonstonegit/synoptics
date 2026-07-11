@@ -5,6 +5,7 @@ from helpers import (
     radio_other,
     text,
     conditional_radio_multiple,
+    conditional_radio_other,
     conditional_value,
     checkbox_group,
     field_label,
@@ -619,7 +620,7 @@ checkbox_group(
     ("section", "SPECIAL STUDIES"),
 
     conditional_value(
-        label="MMR Protien Immunohistochemistry",
+        label="MMR Protein Immunohistochemistry",
         options=[
             "Not applicable",
             "Performed on patient's prior biopsy showing no loss of nuclear expression of MMR proteins, indicating low probability of MSI-H",
@@ -646,6 +647,8 @@ checkbox_group(
             or large deletion / duplication testing of germline MSH6 may be indicated)""",
             """ Loss of nuclear expression of PMS2 only: high probability of Lynch syndrome (sequencing and /
             or large deletion / duplication testing of germline PMS2 may be indicated)""",
+            "Other",
+            "Cannot be determined",
         ],
         value_fields={
             "Other": ("Comment", ""),
