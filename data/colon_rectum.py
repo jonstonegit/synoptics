@@ -14,6 +14,8 @@ from helpers import (
 
 DISPLAY_NAME = "Colon and Rectum, Resection"
 
+HIDDEN_TABLE_VALUES = {}
+
 SYNOPTIC = [
     ("title", "CASE SUMMARY", "(COLON AND RECTUM: Resection)\n Standard(s): AJCC 8 "),
 

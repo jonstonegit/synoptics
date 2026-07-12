@@ -14,6 +14,12 @@ from helpers import (
 
 DISPLAY_NAME = "Prostate, Resection"
 
+HIDDEN_TABLE_VALUES = {
+    "Via percentage",
+    "Via dimension",
+    "Via percentage; Via dimension",
+}
+
 epe_location_field = checkbox_group(
         label="Location of Extraprostatic Extension (select all that apply)",
         options=[
@@ -49,6 +55,7 @@ epe_location_field = checkbox_group(
     ),
 
 SYNOPTIC = [
+
     ("title", "CASE SUMMARY", "(PROSTATE GLAND: Radical Prostatectomy) Standard(s): AJCC-UICC 8"),
 
     ("section", "SPECIMEN"),
@@ -238,7 +245,7 @@ SYNOPTIC = [
     ),
 
     conditional_radio_multiple(
-        "Intraductal Carcinoma (IDC) (Note D)",
+        "Intraductal Carcinoma (IDC)",
         [
             "Not identified",
             "Present",
@@ -319,11 +326,11 @@ SYNOPTIC = [
 
     (
     "section",
-    "TUMOR QUANTITATION (Note E)",
+    "TUMOR QUANTITATION",
     ),
 
     checkbox_group(
-        label="Tumor Quantitation (select all that apply)",
+        label="Tumor Quantitation",
         options=[
             "Via percentage",
             "Via dimension",
@@ -376,7 +383,7 @@ SYNOPTIC = [
     ),
 
     conditional_radio_multiple(
-        label="Extraprostatic Extension (EPE) (Note F)",
+        label="Extraprostatic Extension (EPE)",
         options=[
             "Not identified",
             "Present, focal",
@@ -394,7 +401,66 @@ SYNOPTIC = [
         key="extraprostatic_extension",
     ),
 
-    
+    conditional_value(
+        label="Urinary Bladder Neck Invasion",
+        options=[
+            "Not identified",
+            "Present",
+            "Cannot be determined",
+        ],
+        value_fields={
+            "Cannot be determined": (
+                "Comment",
+                "",
+            ),
+        },
+        key="urinary_bladder_neck_invasion",
+    ),
+
+    radio(
+        label="Seminal Vesicle Invasion",
+        options=[
+            "Not identified",
+            "Present, right",
+            "Present, left",
+            "Present, bilateral",
+            "Present, laterality cannot be determined",
+            "No seminal vesicle present",
+        ],
+        key="seminal_vesicle_invasion",
+    ),
+
+    conditional_value(
+    label="Lymphatic and / or Vascular Invasion",
+    options=[
+        "Not identified",
+        "Present",
+        "Cannot be determined",
+    ],
+    value_fields={
+        "Cannot be determined": (
+            "Comment",
+            "",
+        ),
+    },
+    key="lymphatic_or_vascular_invasion",
+),
+
+    conditional_value(
+        label="Perineural Invasion",
+        options=[
+            "Do not include",
+            "Not identified",
+            "Present",
+        ],
+        value_fields={
+            "Present": (
+                "Specify",
+                "",
+            ),
+        },
+        key="perineural_invasion",
+    ),
 
 
 ]

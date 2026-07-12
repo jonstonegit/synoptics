@@ -68,16 +68,15 @@ def build_rows_from_synoptic(
     synoptic: Any,
     *,
     field_renderer: FieldRenderer | None = None,
+    hidden_table_values: set[str] | list[str] | None = None,
 ) -> list[OutputRow]:
-    """Render all fields and convert a synoptic into output rows.
+    """Render all fields and convert a synoptic into output rows."""
 
-    In the application, ``field_renderer`` defaults to
-    ``synoptic_engine.widgets.get_field_value``. Tests may inject a
-    renderer so this module can be tested without Streamlit.
-    """
     validate_synoptic(synoptic)
 
     renderer = field_renderer or _load_default_field_renderer()
+    hidden_values = set(hidden_table_values or [])
+
     rows: list[OutputRow] = []
 
     for item_index, item in enumerate(synoptic):
@@ -87,12 +86,18 @@ def build_rows_from_synoptic(
             continue
 
         result = renderer(item)
+
         label, value, child_rows = _validate_field_result(
             result,
             item_index=item_index,
         )
 
+        # Keep the table row, but hide matching words in its value column.
+        if isinstance(value, str) and value in hidden_values:
+            value = "\u00A0"
+
         parent_row: OutputRow = ("row", label, value)
+
         validate_output_row(parent_row, item_index)
         rows.append(parent_row)
         rows.extend(child_rows)
