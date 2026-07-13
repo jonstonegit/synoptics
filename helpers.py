@@ -23,6 +23,8 @@ from synoptic_engine.output import (
     render_copyable_table,
 )
 from synoptic_engine.rows import build_rows_from_synoptic
+
+
 from synoptic_engine.widgets import (
     field_label,
     get_field_value,

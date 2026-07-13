@@ -63,6 +63,73 @@ def _validate_field_result(
 
     return label, value, child_rows
 
+def _has_visible_value(value: Any) -> bool:
+    """Return True when a report value contains visible content."""
+
+    if value is None:
+        return False
+
+    if isinstance(value, (list, tuple, set, dict)):
+        return bool(value)
+
+    return bool(
+        str(value)
+        .replace("\u00A0", "")
+        .strip()
+    )
+
+def remove_empty_sections(
+    rows: list[OutputRow],
+) -> list[OutputRow]:
+    """Remove section headers that have no visible result rows."""
+
+    cleaned_rows: list[OutputRow] = []
+
+    pending_section: OutputRow | None = None
+    pending_rows: list[OutputRow] = []
+
+    def flush_section() -> None:
+        nonlocal pending_section, pending_rows
+
+        if pending_section is None:
+            cleaned_rows.extend(pending_rows)
+
+        else:
+            has_visible_content = any(
+                len(row) >= 3
+                and row[0] in {"row", "indent"}
+                and _has_visible_value(row[2])
+                for row in pending_rows
+            )
+
+            if has_visible_content:
+                cleaned_rows.append(pending_section)
+                cleaned_rows.extend(pending_rows)
+
+        pending_section = None
+        pending_rows = []
+
+    for row in rows:
+        row_type = row[0]
+
+        if row_type == "section":
+            flush_section()
+            pending_section = row
+
+        elif row_type == "title":
+            flush_section()
+            cleaned_rows.append(row)
+
+        elif pending_section is not None:
+            pending_rows.append(row)
+
+        else:
+            cleaned_rows.append(row)
+
+    flush_section()
+
+    return cleaned_rows
+
 
 def build_rows_from_synoptic(
     synoptic: Any,
@@ -102,7 +169,7 @@ def build_rows_from_synoptic(
         rows.append(parent_row)
         rows.extend(child_rows)
 
-    return rows
+    return remove_empty_sections(rows)
 
 
 __all__ = [

@@ -40,8 +40,8 @@ def load_synoptics() -> tuple[dict, dict]:
             module = importlib.import_module(full_module_name)
         except Exception as exc:
             raise SynopticConfigurationError(
-                f"Unable to import synoptic module "
-                f"'{full_module_name}'."
+                f"Unable to import synoptic module '{full_module_name}': "
+                f"{type(exc).__name__}: {exc}"
             ) from exc
 
         if not hasattr(module, "DISPLAY_NAME"):

@@ -14,7 +14,10 @@ from helpers import (
 
 DISPLAY_NAME = "Colon and Rectum, Resection"
 
-HIDDEN_TABLE_VALUES = {}
+HIDDEN_TABLE_VALUES = {
+    "Do not include ancillary studies section",
+    "Do not include additional findings section",
+}
 
 SYNOPTIC = [
     ("title", "CASE SUMMARY", "(COLON AND RECTUM: Resection)\n Standard(s): AJCC 8 "),
@@ -597,10 +600,12 @@ checkbox_group(
         },
     ),
 
+    ("section", "ADDITIONAL FINDINGS"),
+
     checkbox_group(
         label="Additional Findings",
         options=[
-            "Do not include",
+            "Do not include additional findings section",
             "None identified",
             "Adenoma(s)",
             "Ulcerative colitis",
@@ -609,53 +614,120 @@ checkbox_group(
             "Dysplasia arising in inflammatory bowel disease",
             "Other",
         ],
-        exclusive_options=["Do not include", "None identified"],
+        exclusive_options=["Do not include additional findings section", "None identified"],
         conditional_fields={
             "Other": text(
                 "Comment",
                 key="additional_findings_other",
             ),
         },
-        default="Do not include",
+        default="Do not include additional findings section",
     ),
 
     ("section", "SPECIAL STUDIES"),
 
-    conditional_value(
-        label="MMR Protein Immunohistochemistry",
+    conditional_radio_multiple(
+        label="Ancillary Studies",
         options=[
-            "Not applicable",
-            "Performed on patient's prior biopsy showing no loss of nuclear expression of MMR proteins, indicating low probability of MSI-H",
-            "Immunostains for MLH1, PMS2, MSH2, and MSH6 shows no loss of nuclear expression of MMR proteins, indicating low probability of MSI-H",
-            """Immunostains for MLH1, PMS2, MSH2, and MSH6 shows loss of nuclear expression of MLH1 and PMS2: 
-            testing for methylation of the MLH1 promoter and / or mutation of BRAF is indicated (the presence 
-            of a BRAF V600E mutation and / or MLH1 methylation suggests that the tumor is sporadic and germline 
-            evaluation is probably not indicated; absence of both MLH1 methylation and of BRAF V600E mutation 
-            suggests the possibility of Lynch Syndrome and sequencing and / or large deletion / duplication testing 
-            of germline MLH1 may be indicated)""",
-            """Immunostains for MLH1, PMS2, MSH2, and MSH6 shows loss of nuclear expression of MLH1 and PMS2: 
-            testing for methylation of the MLH1 promoter is being performed, result to follow in an addendum""",
-            """Testing on prior biopsy showed loss of nuclear expression of MLH1 and PMS2 with MLH1 promotor 
-            hypermethylation suggesting that the tumor is sporadic and germline 
-            evaluation is probably not indicated""",
-            """Testing on prior biopsy showed loss of nuclear expression of MLH1 and PMS2 with absent MLH1 promotor 
-            hypermethylation suggesting the possibility of Lynch Syndrome and sequencing and / or large deletion / duplication testing 
-            of germline MLH1 may be indicated)""",
-            """Loss of nuclear expression of MSH2 and MSH6: high probability of Lynch syndrome
-            (sequencing and / or large deletion / duplication testing of germline MSH2 may be indicated and, if
-            negative, sequencing and / or large deletion / duplication testing of germline MSH6 may be
-            indicated) """,
-            """Loss of nuclear expression of MSH6 only: high probability of Lynch syndrome (sequencing and /
-            or large deletion / duplication testing of germline MSH6 may be indicated)""",
-            """ Loss of nuclear expression of PMS2 only: high probability of Lynch syndrome (sequencing and /
-            or large deletion / duplication testing of germline PMS2 may be indicated)""",
+            "Do not include ancillary studies section",
+            "Mismatch Repair (MMR) Immunohistochemistry",
+            "Immunohistochemistry",
             "Other",
-            "Cannot be determined",
         ],
-        value_fields={
-            "Other": ("Comment", ""),
-            "Cannot be determined": ("Comment", ""),
+        conditional_fields={
+            "Mismatch Repair (MMR) Immunohistochemistry": conditional_value(
+                label="MMR Protein Immunohistochemistry",
+                options=[
+                    (
+                        "Performed on patient's prior biopsy showing no loss "
+                        "of nuclear expression of MMR proteins, indicating "
+                        "low probability of MSI-H"
+                    ),
+                    (
+                        "Immunostains for MLH1, PMS2, MSH2, and MSH6 show "
+                        "no loss of nuclear expression of MMR proteins, "
+                        "indicating low probability of MSI-H"
+                    ),
+                    (
+                        "Immunostains for MLH1, PMS2, MSH2, and MSH6 show "
+                        "loss of nuclear expression of MLH1 and PMS2: "
+                        "testing for methylation of the MLH1 promoter and/or "
+                        "mutation of BRAF is indicated (the presence of a "
+                        "BRAF V600E mutation and/or MLH1 methylation suggests "
+                        "that the tumor is sporadic and germline evaluation is "
+                        "probably not indicated; absence of both MLH1 "
+                        "methylation and BRAF V600E mutation suggests the "
+                        "possibility of Lynch syndrome, and sequencing and/or "
+                        "large deletion/duplication testing of germline MLH1 "
+                        "may be indicated)"
+                    ),
+                    (
+                        "Immunostains for MLH1, PMS2, MSH2, and MSH6 show "
+                        "loss of nuclear expression of MLH1 and PMS2: "
+                        "testing for methylation of the MLH1 promoter is "
+                        "being performed; result to follow in an addendum"
+                    ),
+                    (
+                        "Testing on prior biopsy showed loss of nuclear "
+                        "expression of MLH1 and PMS2 with MLH1 promoter "
+                        "hypermethylation, suggesting that the tumor is "
+                        "sporadic and germline evaluation is probably not "
+                        "indicated"
+                    ),
+                    (
+                        "Testing on prior biopsy showed loss of nuclear "
+                        "expression of MLH1 and PMS2 with absent MLH1 "
+                        "promoter hypermethylation, suggesting the possibility "
+                        "of Lynch syndrome; sequencing and/or large deletion/"
+                        "duplication testing of germline MLH1 may be indicated"
+                    ),
+                    (
+                        "Loss of nuclear expression of MSH2 and MSH6: high "
+                        "probability of Lynch syndrome (sequencing and/or "
+                        "large deletion/duplication testing of germline MSH2 "
+                        "may be indicated and, if negative, sequencing and/or "
+                        "large deletion/duplication testing of germline MSH6 "
+                        "may be indicated)"
+                    ),
+                    (
+                        "Loss of nuclear expression of MSH6 only: high "
+                        "probability of Lynch syndrome (sequencing and/or "
+                        "large deletion/duplication testing of germline MSH6 "
+                        "may be indicated)"
+                    ),
+                    (
+                        "Loss of nuclear expression of PMS2 only: high "
+                        "probability of Lynch syndrome (sequencing and/or "
+                        "large deletion/duplication testing of germline PMS2 "
+                        "may be indicated)"
+                    ),
+                    "Other",
+                    "Cannot be determined",
+                ],
+                value_fields={
+                    "Other": (
+                        "Comment",
+                        "",
+                    ),
+                    "Cannot be determined": (
+                        "Comment",
+                        "",
+                    ),
+                },
+                key="mmr_protein_immunohistochemistry",
+            ),
+
+            "Immunohistochemistry": text(
+                label="Immunohistochemistry Comment",
+                key="ancillary_studies_immunohistochemistry_comment",
+            ),
+
+            "Other": text(
+                label="Other Ancillary Studies Comment",
+                key="ancillary_studies_other_comment",
+            ),
         },
+        key="ancillary_studies",
     ),
 
     ("section", "pTNM CLASSIFICATION (AJCC 8th Edition)"),
@@ -735,8 +807,8 @@ checkbox_group(
         session_key="show_full_tnm",
         options=[
             (
-                "pN not assigned: No nodes submitted or found",
-                "pN not assigned",
+                "pN not assigned (No nodes submitted or found)",
+                "pN not assigned (No nodes submitted or found)",
             ),
             (
                 "pN not assigned: Cannot be determined based on available pathological information",
@@ -787,7 +859,7 @@ checkbox_group(
             ),
             (
                 "Not applicable: pM cannot be determined from the submitted specimen(s)",
-                "Not applicable",
+                "Not applicable: pM cannot be determined from the submitted specimen(s)",
             ),
             (
                 "pM1a: Metastasis to one site or organ without peritoneal metastasis",
@@ -807,6 +879,8 @@ checkbox_group(
             ),
         ],
     ),
+
+    
 
 ]
 
