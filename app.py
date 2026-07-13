@@ -1,5 +1,7 @@
 import importlib
 import pkgutil
+import random
+from pathlib import Path
 
 import streamlit as st
 
@@ -117,10 +119,65 @@ st.title("Pathology Synoptic Generator")
 
 synoptics, hidden_table_values = load_synoptics()
 
+PLACEHOLDER = ""
+
 selected = st.selectbox(
     "Choose Synoptic",
-    options=list(synoptics.keys()),
+    options=[
+        PLACEHOLDER,
+        *synoptics.keys(),
+    ],
 )
+
+if selected == PLACEHOLDER:
+    image_directory = (
+        Path(__file__).resolve().parent
+        / "images"
+    )
+
+    if image_directory.exists():
+        png_files = sorted(
+            path
+            for path in image_directory.iterdir()
+            if path.is_file()
+            and path.suffix.lower() == ".png"
+        )
+    else:
+        png_files = []
+
+    if png_files:
+        available_images = {
+            str(path)
+            for path in png_files
+        }
+
+        current_image = st.session_state.get(
+            "splash_image"
+        )
+
+        # Choose an image once per Streamlit session.
+        # This prevents it from changing on every rerun.
+        if current_image not in available_images:
+            current_image = str(
+                random.choice(png_files)
+            )
+
+            st.session_state["splash_image"] = (
+                current_image
+            )
+
+        st.image(
+            current_image,
+            use_container_width=True,
+        )
+
+    else:
+        st.info(
+            "No PNG splash images were found in "
+            f"'{image_directory}'."
+        )
+
+    st.stop()
 
 if selected not in synoptics:
     raise KeyError(
