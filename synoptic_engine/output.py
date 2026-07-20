@@ -139,6 +139,37 @@ def build_word_table(rows: Sequence[tuple[Any, ...]]) -> str:
                 </tr>
                 """
             )
+        
+        elif row_type == "indent2":
+            _, label, value = row
+
+            if value in EXCLUDED_INDENT_VALUES:
+                continue
+
+            table_rows.append(
+                f"""
+                <tr>
+                    <td style="
+                        width:35%;
+                        font-weight:bold;
+                        border:1px solid black;
+                        padding:6px 6px 6px 42px;
+                        vertical-align:top;
+                    ">
+                        - {html.escape(str(label))}:
+                    </td>
+
+                    <td style="
+                        width:65%;
+                        border:1px solid black;
+                        padding:6px;
+                        vertical-align:top;
+                    ">
+                        {html.escape(str(value))}
+                    </td>
+                </tr>
+                """
+            )
 
     return f"""
     <table style="

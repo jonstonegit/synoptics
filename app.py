@@ -7,9 +7,11 @@ import streamlit as st
 
 import data
 
-from helpers import (
+from synoptic_engine import (
+    SynopticConfigurationError,
     build_rows_from_synoptic,
     render_copyable_table,
+    build_word_table,
 )
 
 

@@ -22,10 +22,12 @@ SUPPORTED_FIELD_TYPES = frozenset(
         "conditional_radio_multiple",
         "checkbox_group",
         "text",
+        "text_group",
         "textarea",
         "radio_toggle",
         "option_toggle",
         "conditional_value",
+        "display_link",
     }
 )
 
@@ -34,6 +36,7 @@ ROW_LENGTHS = {
     "section": 2,
     "row": 3,
     "indent": 3,
+    "indent2": 3,
 }
 
 
@@ -361,6 +364,55 @@ def validate_field(field: Any, context: str = "field") -> None:
                 raise SynopticConfigurationError(
                     f"{field_context}: suffix for {option!r} must be a string."
                 )
+                
+    if field_type == "text_group":
+        prompt = require_key(
+            field,
+            "prompt",
+            field_context,
+        )
+
+        validate_nonempty_string(
+            prompt,
+            "prompt",
+            field_context,
+        )
+
+        child_fields = require_key(
+            field,
+            "child_fields",
+            field_context,
+        )
+
+        validate_children(
+            child_fields,
+            f"{field_context}.child_fields",
+        )
+
+    if field_type == "display_link":
+        url = require_key(
+            field,
+            "url",
+            field_context,
+        )
+
+        link_text = require_key(
+            field,
+            "link_text",
+            field_context,
+        )
+
+        validate_nonempty_string(
+            url,
+            "url",
+            field_context,
+        )
+
+        validate_nonempty_string(
+            link_text,
+            "link_text",
+            field_context,
+        )
 
 
 def validate_options_or_empty(

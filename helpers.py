@@ -16,6 +16,8 @@ from synoptic_engine.definitions import (
     radio_toggle,
     text,
     textarea,
+    text_group,
+    display_link,
 )
 from synoptic_engine.errors import SynopticConfigurationError
 from synoptic_engine.output import (
@@ -51,4 +53,7 @@ __all__ = [
     "render_copyable_table",
     "text",
     "textarea",
+    "text_group",
+    "display_link",
+
 ]

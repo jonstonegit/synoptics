@@ -127,11 +127,17 @@ def conditional_radio_other(
 def conditional_radio_multiple(
     label: str,
     options: list[str],
-    conditional_fields: dict[str, dict[str, Any] | list[dict[str, Any]]],
+    conditional_fields: dict[
+        str,
+        dict[str, Any] | list[dict[str, Any]],
+    ],
     allow_other: bool = False,
+    child_value_options: list[str] | None = None,
+    default: str | None = None,
     key: str | None = None,
 ) -> dict[str, Any]:
-    """Create a radio field whose selected answer can reveal child fields."""
+    """Create a radio field whose answer can reveal child fields."""
+
     return _validated(
         {
             "type": "conditional_radio_multiple",
@@ -139,6 +145,8 @@ def conditional_radio_multiple(
             "options": options,
             "conditional_fields": conditional_fields,
             "allow_other": allow_other,
+            "child_value_options": child_value_options or [],
+            "default": default,
             "key": key or label,
         }
     )
@@ -221,6 +229,40 @@ def option_toggle(
         }
     )
 
+def display_link(
+    label: str,
+    url: str,
+    link_text: str,
+) -> dict[str, Any]:
+    """Create a clickable link that is not included in the report."""
+
+    return _validated(
+        {
+            "type": "display_link",
+            "label": label,
+            "url": url,
+            "link_text": link_text,
+        }
+    )
+
+def text_group(
+    label: str,
+    child_fields: dict[str, Any] | list[dict[str, Any]],
+    prompt: str = "Tumor Identifier",
+    key: str | None = None,
+) -> dict[str, Any]:
+    """Create a text field with nested child fields."""
+
+    return _validated(
+        {
+            "type": "text_group",
+            "label": label,
+            "prompt": prompt,
+            "child_fields": child_fields,
+            "key": key or label,
+        }
+    )
+
 
 __all__ = [
     "checkbox_group",
@@ -228,10 +270,14 @@ __all__ = [
     "conditional_radio_multiple",
     "conditional_radio_other",
     "conditional_value",
+    "display_link",
     "option_toggle",
     "radio",
     "radio_other",
     "radio_toggle",
     "text",
     "textarea",
+    "text_group",
+    
 ]
+

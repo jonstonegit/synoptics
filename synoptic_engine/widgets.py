@@ -284,6 +284,25 @@ def _get_field_value(
                 )
             )
 
+        if value in field.get("child_value_options", []):
+            for index, child_row in enumerate(child_rows):
+                _, _, child_value = child_row
+
+                if child_value:
+                    remaining_rows = (
+                        child_rows[:index]
+                        + child_rows[index + 1:]
+                    )
+
+                    return (
+                        label,
+                        child_value,
+                        remaining_rows,
+                    )
+
+            # Hide the table row until a margin is checked.
+            return label, "", []
+
         return label, value, child_rows
 
     if field_type == "checkbox_group":
@@ -423,39 +442,88 @@ def _get_field_value(
 
         value_fields = field["value_fields"]
 
-        if value in value_fields:
-            prompt, suffix = value_fields[value]
+        if value not in value_fields:
+            return label, value, []
 
-            entered = st.text_input(
-                prompt,
-                key=f"{base_key}_{value}",
+        prompt, suffix = value_fields[value]
+
+        entered = st.text_input(
+            prompt,
+            key=f"{base_key}_{value}",
+        )
+
+        if not entered:
+            return label, value, []
+
+        entered = f"{entered}{suffix}" if suffix else entered
+
+        normalized_value = value.casefold()
+
+        # Preserve comparison wording with the entered measurement.
+        if normalized_value.startswith("at least"):
+            return label, f"At least {entered}", []
+
+        if normalized_value.startswith("greater than"):
+            return label, f"Greater than {entered}", []
+
+        if normalized_value.startswith("less than"):
+            return label, f"Less than {entered}", []
+
+        # Explanations should appear underneath the selected result.
+        if (
+            "cannot be determined" in normalized_value
+            or "cannot be assessed" in normalized_value
+        ):
+            return (
+                label,
+                value,
+                [("indent", prompt, entered)],
             )
 
-            if entered:
-                entered = f"{entered}{suffix}" if suffix else entered
+        # For all other configured text fields, use the entered text
+        # as the table value.
+        return label, entered, []
 
-                if value in {
-                    "Exact size",
-                    "Exact number",
-                    "Exact distance in cm",
-                    "Exact distance in mm",
-                }:
-                    return label, entered, []
+    if field_type == "display_link":
+        field_label(label)
 
-                if value == "At least":
-                    return label, f"At least {entered}", []
+        st.link_button(
+            field["link_text"],
+            field["url"],
+        )
 
-                if value in {
-                    "Other",
-                    "Cannot be determined",
-                }:
-                    return (
-                        label,
-                        value,
-                        [("indent", "Comment", entered)],
-                    )
+        return label, "", []
+    
+    if field_type == "text_group":
+        field_label(label)
 
-        return label, value, []
+        value = st.text_input(
+            field["prompt"],
+            key=base_key,
+        )
+
+        child_rows = _render_children(
+            field["child_fields"],
+            indent_level=indent_level,
+            context=f"Field {label!r} child_fields",
+        )
+
+        # Put all Tumor Characteristics rows one level
+        # farther into the report table.
+        child_rows = [
+            (
+                "indent2",
+                child_row[1],
+                child_row[2],
+            )
+            if child_row[0] == "indent"
+            else child_row
+            for child_row in child_rows
+        ]
+
+        # Preserve the Tumor 1/Tumor 2 row even if the
+        # optional identifier has not been entered.
+        return label, value or "\u00A0", child_rows
 
     raise SynopticConfigurationError(
         f"Unsupported field type {field_type!r} for field {label!r}."
