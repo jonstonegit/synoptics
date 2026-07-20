@@ -1,8 +1,8 @@
 Purpose:
-    Build pathology CAP synoptic reports by users at my business.
+    Build pathology CAP synoptic reports.
 
 Users:
-    Pathologists
+    Pathologists and trascriptionists
 
 Goals:
     - Display CAP protocols
@@ -12,15 +12,14 @@ Goals:
     - Save JSON
 
 Current architecture:
+    - app.py runs the program
+    - synoptic_engine folder contains files that build the table
+    - data folder contains site specific files used to build each synoptic
+    - images folder contains image to display on splash screen
 
 app.py
     Streamlit UI
 
-helpers.py
-    Converts JSON into rows
-
-Future ideas
-    AI completion
-    Movie quote splash screen
-    Voice dictation
-    Search
+Future work
+    Complete synoptics from more sites
+    Work on formatting optimization and customization
