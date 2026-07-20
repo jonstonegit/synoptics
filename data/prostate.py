@@ -33,7 +33,7 @@ def nodal_laterality(site_key: str):
         conditional_fields={
             "Cannot be determined": [
                 text(
-                    label="Explain",
+                    label="Comment",
                     key=f"{site_key}_laterality_cannot_be_determined",
                 ),
             ],
@@ -79,7 +79,7 @@ def regional_node_summary_fields():
                     "",
                 ),
                 "Cannot be determined": (
-                    "Explain",
+                    "Comment",
                     "",
                 ),
             },
@@ -112,7 +112,7 @@ def positive_regional_node_fields():
                     "",
                 ),
                 "Cannot be determined": (
-                    "Explain",
+                    "Comment",
                     "",
                 ),
             },
@@ -207,7 +207,7 @@ def positive_regional_node_fields():
                     "",
                 ),
                 "Cannot be determined": (
-                    "Explain",
+                    "Comment",
                     "",
                 ),
             },
@@ -251,7 +251,7 @@ def positive_regional_node_fields():
                     "",
                 ),
                 "Cannot be determined": (
-                    "Explain",
+                    "Comment",
                     "",
                 ),
             },
@@ -273,7 +273,7 @@ def positive_regional_node_fields():
             ],
             value_fields={
                 "Cannot be determined": (
-                    "Explain",
+                    "Comment",
                     "",
                 ),
                 "Other": (
@@ -927,7 +927,7 @@ SYNOPTIC = [
 
             "Cannot be determined": [
                 text(
-                    label="Explain",
+                    label="Comment",
                     key="distant_metastasis_cannot_be_determined",
                 ),
             ],
