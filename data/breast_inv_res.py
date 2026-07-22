@@ -2071,7 +2071,7 @@ SYNOPTIC = [
                 key="distant_metastasis_cannot_be_determined",
             ),
         },
-        default="Not applicable "
+        default="Not applicable ",
         exclusive_options=[
             "Not applicable ",
         ],
