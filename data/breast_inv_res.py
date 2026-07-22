@@ -310,6 +310,11 @@ dcis_margin_within_2_mm = (
     "DCIS present within 0-2 mm of final margins"
 )
 
+dcis_exact_size = (
+    "Largest dimension of DCIS "
+    "in Millimeters (mm)"
+)
+
 def margin_location_field(
     label: str,
     key: str,
