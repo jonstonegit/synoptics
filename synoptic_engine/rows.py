@@ -176,4 +176,6 @@ __all__ = [
     "FieldRenderer",
     "OutputRow",
     "build_rows_from_synoptic",
+    "remove_empty_sections",
+    "_has_visible_value",
 ]

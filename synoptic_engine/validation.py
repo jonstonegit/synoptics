@@ -217,6 +217,28 @@ def validate_field(field: Any, context: str = "field") -> None:
                 f"{field_context}: do not include 'Other' in options when "
                 "allow_other=True; the widget adds it automatically."
             )
+        
+        child_value_options = field.get(
+            "child_value_options",
+            [],
+        )
+
+        if not isinstance(child_value_options, list):
+            raise SynopticConfigurationError(
+                f"{field_context}: child_value_options "
+                "must be a list."
+            )
+
+        unknown_child_value_options = (
+            set(child_value_options) - set(field["options"])
+        )
+
+        if unknown_child_value_options:
+            raise SynopticConfigurationError(
+                f"{field_context}: child_value_options contains "
+                f"unknown option(s): "
+                f"{sorted(unknown_child_value_options)}."
+            )
 
     if field_type == "checkbox_group":
         conditional_fields = require_key(

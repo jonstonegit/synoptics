@@ -301,6 +301,11 @@ N_SUFFIX_OPTIONS = [
     ),
 ]
 
+dcis_exact_size = (
+    "Largest dimension of DCIS "
+    "in Millimeters (mm)"
+)
+
 invasive_margin_within_2_mm = (
     "Invasive carcinoma present within 0-2 mm "
     "of final margins"
@@ -1226,17 +1231,11 @@ SYNOPTIC = [
                 conditional_radio_multiple(
                     label="Estimated Size of DCIS",
                     options=[
-                        (
-                            "Largest dimension of DCIS "
-                            "in Millimeters (mm)"
-                        ),
+                        dcis_exact_size,
                         "Other",
                     ],
                     conditional_fields={
-                        (
-                            "Largest dimension of DCIS "
-                            "in Millimeters (mm)"
-                        ): text(
+                        dcis_exact_size: text(
                             label="Specify Largest Dimension",
                             suffix=" mm",
                             key="dcis_largest_dimension",
@@ -1569,6 +1568,7 @@ SYNOPTIC = [
             "Do not include",
             "Not identified",
         ],
+        default="Do not include",
         key="microcalcifications",
     ),
 
