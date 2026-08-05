@@ -12,7 +12,7 @@ from synoptic_engine import (
     handle_exclusive_checkbox,
 )
 
-DISPLAY_NAME = ", Resection"
+DISPLAY_NAME = "Endometrium"
 
 HIDDEN_TABLE_VALUES = {
     "Do not include",
