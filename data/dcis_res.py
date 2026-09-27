@@ -192,9 +192,9 @@ SYNOPTIC = [
         "Size (Extent) of DCIS",
         ["At least (estimated size in Millimeters)", "Cannot be determined"],
         "size",
-        values={"At least (estimated size in Millimeters)": ("Specify Estimated Size (Extent)", " mm")},
+        values={"At least (estimated size in Millimeters)": ("Estimated Size (Extent) in mm", " mm")},
     ),
-    text("Size of DCIS Comment", key="breast_dcis_size_comment"),
+    
     checkbox_group(
         label="Architectural Pattern(s)",
         options=[
