@@ -260,10 +260,7 @@ SYNOPTIC = [
         },
         key="breast_dcis_margin_status",
     ),
-    text(
-        "Margin Comment for DCIS (consider using for pleomorphic or florid LCIS)",
-        key="breast_dcis_margin_comment",
-    ),
+    
     ("section", "REGIONAL LYMPH NODES"),
     conditional_radio_multiple(
         label="Regional Lymph Node Status",
@@ -314,7 +311,6 @@ SYNOPTIC = [
         },
         key="breast_dcis_node_status",
     ),
-    text("Regional Lymph Node Comment", key="breast_dcis_node_comment"),
     ("section", "DISTANT METASTASIS"),
     checkbox_group(
         label="Distant Site(s) Involved, if applicable",
