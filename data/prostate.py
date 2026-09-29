@@ -20,11 +20,12 @@ HIDDEN_TABLE_VALUES = {
     "Via percentage; Via dimension",
     "Do not include additional findings section",
     "Do not include special studies section",
+    "Do not include",
 }
 
 def nodal_laterality(site_key: str):
     return checkbox_group(
-        label="Laterality (select all that apply)",
+        label="Laterality",
         options=[
             "Right",
             "Left",
@@ -120,7 +121,7 @@ def positive_regional_node_fields():
         ),
 
         checkbox_group(
-            label="Nodal Site(s) with Tumor (select all that apply)",
+            label="Nodal Site(s) with Tumor",
             options=[
                 "Hypogastric",
                 "Obturator",
@@ -288,7 +289,7 @@ def positive_regional_node_fields():
     ]
 
 epe_location_field = checkbox_group(
-        label="Location of Extraprostatic Extension (select all that apply)",
+        label="Location of Extraprostatic Extension",
         options=[
             "Right apical",
             "Right bladder neck",
@@ -853,16 +854,16 @@ SYNOPTIC = [
                 checkbox_group(
                     label=(
                         "Gleason Pattern at Margin(s) Involved by "
-                        "Carcinoma (Note K) (select all that apply)"
+                        "Carcinoma "
                     ),
                     options=[
-                        "Do not inlcude",
+                        "Do not include",
                         "Pattern 3",
                         "Pattern 4",
                         "Pattern 5",
                     ],
                     key="gleason_pattern_at_involved_margin",
-                    default="Do not inlcude"
+                    default="Do not include"
                 ),
             ],
         },
